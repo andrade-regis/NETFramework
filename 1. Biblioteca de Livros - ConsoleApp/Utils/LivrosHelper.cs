@@ -14,12 +14,12 @@ namespace BibliotecaDeLivros.Utils
             Livro livro = null;
 
             Console.WriteLine("Preencha os dados do novo livro:");
-            Console.WriteLine("");
+            Console.WriteLine();
             
             Console.Write("Título: ");
             string titulo = Console.ReadLine();
 
-            if(!ValidarCampo(titulo))
+            if(!ValidarCampo(titulo, "Título"))
             {
                 return null;
             }
@@ -27,7 +27,7 @@ namespace BibliotecaDeLivros.Utils
             Console.Write("Autor: ");
             string autor = Console.ReadLine();
 
-            if (!ValidarCampo(autor))
+            if (!ValidarCampo(autor, "Autor"))
             {
                 return null;
             }
@@ -35,7 +35,7 @@ namespace BibliotecaDeLivros.Utils
             Console.Write("Ano (4 Dígitos): ");
             string ano = Console.ReadLine();
 
-            if (!ValidarCampo(ano))
+            if (!ValidarCampo(ano, "Ano"))
             {
                 return null;
             }
@@ -49,7 +49,7 @@ namespace BibliotecaDeLivros.Utils
             Console.Write("Gênero: ");
             string genero = Console.ReadLine();
 
-            if (!ValidarCampo(genero))
+            if (!ValidarCampo(genero, "Gênero"))
             {
                 return null;
             }
@@ -66,11 +66,11 @@ namespace BibliotecaDeLivros.Utils
             return livro;
         }
 
-        public static bool ValidarCampo(string campo)
+        public static bool ValidarCampo(string input, string nomeCampo)
         {
-            if (string.IsNullOrWhiteSpace(campo))
+            if (string.IsNullOrWhiteSpace(input))
             {
-                MenuHelper.ExibirMensagemOperaçãoCancelada(campo);
+                ConsoleHelper.ExibirMensagemOperaçãoCancelada(nomeCampo);
                 return false;
             }
             else
@@ -87,6 +87,44 @@ namespace BibliotecaDeLivros.Utils
         public static Livro LocalizarLivroPorTitulo(IList<Livro> livros, string titulo)
         {
             return livros.FirstOrDefault(l => l.Titulo.Equals(titulo, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public static Livro ExibirMultiplasOpçõesParaRemover(IList<Livro> livrosEncontrados)
+        {
+            Livro livro = null;
+
+            Console.WriteLine("Livros correspondentes: ");
+
+            for (int contador = 1; contador <= livrosEncontrados.Count; contador++)
+            {
+                string descritivo = $" Posição: {contador}\n{livrosEncontrados[contador-1]}";
+
+                ConsoleHelper.ExibirMensagemComParagrafoAntes(descritivo);
+            }
+
+            Console.Write("Selecione a POSIÇÃO do livro a ser removido: ");
+            string userOption = Console.ReadLine();
+
+            if (int.TryParse(userOption, out int option))
+            {
+                if(option > 0 &&
+                   option <= livrosEncontrados.Count)
+                {
+                    livro = livrosEncontrados[option - 1];
+                }
+                else
+                {
+                    ConsoleHelper.ExibirMensagemComParagrafoAntes("Opção inválida. Tente novamente.");
+                    MenuHelper.AguardarEnter();
+                }
+            }
+            else
+            {
+                ConsoleHelper.ExibirMensagemComParagrafoAntes("Opção inválida. Tente novamente.");
+                MenuHelper.AguardarEnter();
+            }
+
+            return livro;
         }
     }
 }

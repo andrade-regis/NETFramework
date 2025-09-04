@@ -5,11 +5,16 @@ using BibliotecaDeLivros.Utils;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace BibliotecaDeLivros.Entidades
 {
     public class Biblioteca
     {
+        private readonly string arquivoDados = "livros.json";
+        private readonly string diretorioDados = Path.Combine(Path.GetTempPath(), "Data");
+
         public Biblioteca()
         {
             CarregarDados();
@@ -28,8 +33,7 @@ namespace BibliotecaDeLivros.Entidades
             
             SalvarDados();
 
-            Console.WriteLine();
-            Console.WriteLine("Livro Adicionado");
+            ConsoleHelper.ExibirMensagemComParagrafoAntes("Livro Adicionado");
 
             MenuHelper.AguardarEnter();
         }
@@ -38,17 +42,15 @@ namespace BibliotecaDeLivros.Entidades
         {
             if (Livros.Count == 0)
             {
-                Console.WriteLine("Nenhum livro cadastrado.");
+                ConsoleHelper.ExibirMensagemComParagrafoAntes("Nenhum livro cadastrado.");
             }
             else
             {
-                Console.WriteLine("--- Livros Cadastrados ---");
-                Console.WriteLine("");
+                ConsoleHelper.ExibirMensagemComParagrafoAntes("--- Livros Cadastrados ---");
 
                 foreach (var livro in Livros)
                 {
-                    Console.WriteLine(livro);
-                    Console.WriteLine();
+                    ConsoleHelper.ExibirMensagemComParagrafoAntes(livro.ToString());
                 }
             }            
 
@@ -59,18 +61,19 @@ namespace BibliotecaDeLivros.Entidades
         {
             Console.Write("Informe o título do livro: ");
             string titulo = Console.ReadLine();
-            Console.WriteLine();
 
-            if (!LivrosHelper.ValidarCampo(titulo))
+            if (!LivrosHelper.ValidarCampo(titulo, "Título"))
                 return;
 
             var livroEncontrado = LivrosHelper.LocalizarLivroPorTitulo(Livros, titulo);
 
             if(livroEncontrado != null)
             {
-                Console.WriteLine("Livro encontrado: ");
+                ConsoleHelper.ExibirMensagemComParagrafoAntes("Livro encontrado: ");
 
-                Console.WriteLine(livroEncontrado);
+                ConsoleHelper.ExibirMensagemComParagrafoAntes(livroEncontrado.ToString());
+
+                MenuHelper.AguardarEnter();
                 return;
             }
 
@@ -82,14 +85,14 @@ namespace BibliotecaDeLivros.Entidades
 
                 foreach (var livro in livrosEncontrados)
                 {
-                    Console.WriteLine(livro);
-                    Console.WriteLine();
+                    ConsoleHelper.ExibirMensagemComParagrafoAntes(livro.ToString());
                 }
 
+                MenuHelper.AguardarEnter();
                 return;
             }
 
-            Console.WriteLine("Livro não localizado.");
+            ConsoleHelper.ExibirMensagemComParagrafoAntes("Livro não localizado.");
             MenuHelper.AguardarEnter();
         }
 
@@ -99,35 +102,77 @@ namespace BibliotecaDeLivros.Entidades
             string titulo = Console.ReadLine();
             Console.WriteLine();
 
-            if (!LivrosHelper.ValidarCampo(titulo))
+            if (!LivrosHelper.ValidarCampo(titulo, "Título"))
                 return;
 
             var livroEncontrado = LivrosHelper.LocalizarLivroPorTitulo(Livros, titulo);
 
             if (livroEncontrado != null)
             {
-                Livros.Remove(livroEncontrado);
+                ConsoleHelper.ExibirMensagemComParagrafoDepois(livroEncontrado.ToString());
 
-                SalvarDados();
+                Console.Write("Deseja remover o livro acima? (Sim/Não) ");
+                string input = Console.ReadLine();
 
-                Console.WriteLine("Livro removido com sucesso.");
+                if (input.ToLower().Contains("sim"))
+                {
+                    Livros.Remove(livroEncontrado);
+
+                    SalvarDados();
+
+                    ConsoleHelper.ExibirMensagemComParagrafoAntes("Livro removido com sucesso.");
+                    MenuHelper.AguardarEnter();
+                }
+                else
+                {
+                    ConsoleHelper.ExibirMensagemComParagrafoAntes("Operação Cancelada.");
+                    MenuHelper.AguardarEnter();
+                }
+
+                return;
             }
-            else
+
+            var livrosEncontrados = LivrosHelper.LocalizarLivroPorTrechosDeTitulo(Livros, titulo);
+
+            if (livrosEncontrados != null && livrosEncontrados.Count > 0)
             {
-                Console.WriteLine("Livro não encontrado.");
+                var livroSelecionado = LivrosHelper.ExibirMultiplasOpçõesParaRemover(livrosEncontrados);
+
+                if(livroSelecionado != null)
+                {
+                    Livros.Remove(livroSelecionado);
+
+                    SalvarDados();
+
+                    ConsoleHelper.ExibirMensagemComParagrafoAntes("Livro removido com sucesso.");
+                    MenuHelper.AguardarEnter();
+                }
+
+                return;
             }
+
+            Console.WriteLine("Livro não encontrado.");
 
             MenuHelper.AguardarEnter();
         }
 
         private void SalvarDados()
         {
-            // Implementar lógica para salvar dados em um arquivo ou banco de dados
-        }
+            if (!Directory.Exists(diretorioDados))
+            {
+                Directory.CreateDirectory(diretorioDados);
+            }
+
+            string arquivoJson = JsonConvert.SerializeObject(Livros, Formatting.Indented);
+            File.WriteAllText(Path.Combine(diretorioDados, arquivoDados), arquivoJson);
+        }   
 
         private void CarregarDados()
         {
-            // Implementar lógica para carregar dados de um arquivo ou banco de dados
+            if (File.Exists(Path.Combine(diretorioDados, arquivoDados)))
+            {
+                Livros = JsonConvert.DeserializeObject<IList<Livro>>(File.ReadAllText(Path.Combine(diretorioDados, arquivoDados))) ?? new List<Livro>();
+            }
         }
     }
 }

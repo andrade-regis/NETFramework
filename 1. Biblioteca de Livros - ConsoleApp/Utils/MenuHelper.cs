@@ -26,38 +26,6 @@ namespace BibliotecaDeLivros.Utils
             Console.Write("Escolha uma opção:");
         }
 
-        public static void ExecutarOpção(Biblioteca biblioteca, int option)
-        {
-            switch (option)
-            {
-                case 1:
-                    biblioteca.AdicionarLivro();
-                    break;
-                case 2:
-                    biblioteca.ListarLivros();
-                    break;
-                case 3:
-                    biblioteca.BuscarLivro();
-                    break;
-                case 4:
-                    biblioteca.RemoverLivro();
-                    break;
-                case 5:
-                    Console.WriteLine("Saindo...");
-                    break;
-                default:
-                    Console.WriteLine("Opção inválida. Tente novamente.");
-                    Thread.Sleep(120);
-                    break;
-            }
-        }
-
-        public static void ExibirMensagemOperaçãoCancelada(string Campo)
-        {
-            Console.WriteLine($"{Campo} é obrigatório. Operação cancelada.");
-            AguardarEnter();
-        }
-
         public static void LimparTela()
         {
             Console.Clear();
@@ -68,6 +36,6 @@ namespace BibliotecaDeLivros.Utils
             Console.WriteLine();
             Console.WriteLine("Pressione Enter para continuar...");
             Console.ReadLine();
-        }
+        }        
     }
 }

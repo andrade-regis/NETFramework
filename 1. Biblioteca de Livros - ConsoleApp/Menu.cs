@@ -1,9 +1,10 @@
-﻿using System;
+﻿using BibliotecaDeLivros.Entidades;
+using BibliotecaDeLivros.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BibliotecaDeLivros.Entidades;
-using BibliotecaDeLivros.Utils;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BibliotecaDeLivros
@@ -18,7 +19,7 @@ namespace BibliotecaDeLivros
 
             while (option != 5)
             {
-                Console.Clear();
+                MenuHelper.LimparTela();
 
                 MenuHelper.ExibirMenu();
 
@@ -27,7 +28,28 @@ namespace BibliotecaDeLivros
 
                 if(int.TryParse(userOption, out option))
                 {
-                    MenuHelper.ExecutarOpção(biblioteca, option);
+                    switch (option)
+                    {
+                        case 1:
+                            biblioteca.AdicionarLivro();
+                            break;
+                        case 2:
+                            biblioteca.ListarLivros();
+                            break;
+                        case 3:
+                            biblioteca.BuscarLivro();
+                            break;
+                        case 4:
+                            biblioteca.RemoverLivro();
+                            break;
+                        case 5:
+                            Console.WriteLine("Saindo...");
+                            break;
+                        default:
+                            Console.WriteLine("Opção inválida. Tente novamente.");
+                            MenuHelper.AguardarEnter();
+                            break;
+                    }
                 }
                 else
                 {

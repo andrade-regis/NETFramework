@@ -12,7 +12,7 @@ namespace BibliotecaDeLivros.Entidades
 
         public override string ToString()
         {
-            return $"Título: {Titulo},\n Autor: {Autor},\n Ano: {Ano},\n Gênero: {Gênero}";
+            return $" Título: {Titulo},\n Autor: {Autor},\n Ano: {Ano},\n Gênero: {Gênero}";
         }
     }
 }
