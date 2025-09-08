@@ -4,56 +4,136 @@ GO
 USE Agenda;
 
 -- Tabelas
-CREATE TABLE Usu·rios (
+CREATE TABLE Usu√°rios (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Nome NVARCHAR(100) NOT NULL,
     Sobrenome NVARCHAR(255),
     Email NVARCHAR(255) NOT NULL,
     Senha NVARCHAR(32) NOT NULL,
-    CONSTRAINT UQ_Usu·rios_Email UNIQUE (Email)
+    CONSTRAINT UQ_Usu√°rios_Email UNIQUE (Email)
 );
 
-CREATE TABLE AgendasUsu·rios (
+CREATE TABLE AgendasUsu√°rios (
     Id INT IDENTITY(1,1) PRIMARY KEY,
-    Usu·rioId INT NOT NULL,
+    Usu√°rioId INT NOT NULL,
     Nome NVARCHAR(100) NOT NULL,
-    CONSTRAINT FK_AgendasUsu·rios_Usu·rios FOREIGN KEY (Usu·rioId) REFERENCES Usu·rios(Id),
+    CONSTRAINT FK_AgendasUsu√°rios_Usu√°rios FOREIGN KEY (Usu√°rioId) REFERENCES Usu√°rios(Id),
 );
 
 CREATE TABLE ContatosAgendas (
     Id INT IDENTITY(1,1) PRIMARY KEY,
-    AgendaUsu·rioId INT NOT NULL,
+    AgendaUsu√°rioId INT NOT NULL,
     Nome NVARCHAR(100) NOT NULL,
     Sobrenome NVARCHAR(255),
     Email NVARCHAR(255),
-    EndereÁo NVARCHAR(255),
-    CONSTRAINT FK_ContatosAgendas_AgendasUsu·rios FOREIGN KEY (AgendaUsu·rioId) REFERENCES AgendasUsu·rios(Id),
+    Endere√ßo NVARCHAR(255),
+    CONSTRAINT FK_ContatosAgendas_AgendasUsu√°rios FOREIGN KEY (AgendaUsu√°rioId) REFERENCES AgendasUsu√°rios(Id),
 );
 
 CREATE TABLE TelefonesContatos (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     ContatoAgendaId INT NOT NULL,
-    N˙mero NVARCHAR(20) NOT NULL,
+    N√∫mero NVARCHAR(20) NOT NULL,
     CONSTRAINT FK_TelefonesContatos_ContatosAgendas FOREIGN KEY (ContatoAgendaId) REFERENCES ContatosAgendas(Id),
 );
 GO
 
--- Õndices
-CREATE INDEX IX_AgendasUsu·rios_Usu·rioId ON AgendasUsu·rios(Usu·rioId);
-CREATE INDEX IX_ContatosAgendas_AgendaUsu·rioId ON ContatosAgendas(AgendaUsu·rioId);
+-- √çndices
+CREATE INDEX IX_AgendasUsu√°rios_Usu√°rioId ON AgendasUsu√°rios(Usu√°rioId);
+CREATE INDEX IX_ContatosAgendas_AgendaUsu√°rioId ON ContatosAgendas(AgendaUsu√°rioId);
 CREATE INDEX IX_TelefonesContatos_ContatoAgendaId ON TelefonesContatos(ContatoAgendaId);
 GO
 
+-- Procedures
+
+-- Usu√°rios
+
+CREATE PROCEDURE SP_Usu√°rios_Adicionar
+	@Id INT OUTPUT,
+	@Nome NVARCHAR(100),
+	@Sobrenome NVARCHAR(255),
+	@Email NVARCHAR(255),
+	@Senha NVARCHAR(32)
+AS
+BEGIN
+	INSERT INTO Usu√°rios
+		(Nome, Sobrenome, Email, Senha)
+	VALUES
+		(@Nome, @Sobrenome, @Email, @Senha)
+	
+	SET @Id = SCOPE_IDENTITY();
+END;
+GO;
+
+CREATE PROCEDURE SP_Usu√°rios_Atualizar
+	@Id INT,
+	@Nome NVARCHAR(100),
+	@Sobrenome NVARCHAR(255),
+	@Email NVARCHAR(255),
+	@Senha NVARCHAR(32)
+AS
+BEGIN
+	UPDATE Usu√°rios
+	SET 
+		Nome = @Nome,
+		Sobrenome = @Sobrenome,
+		Email = @Email,
+		Senha = @Senha
+	WHERE
+		Id = @Id
+END;
+GO
+
+CREATE PROCEDURE SP_Usu√°rios_Remover
+	@Id INT,
+	@Nome NVARCHAR(100),
+	@Email NVARCHAR(255)
+AS
+BEGIN
+	DELETE FROM Usu√°rios
+	WHERE
+		Id = @Id AND
+		Nome = @Nome AND
+		Email = @Email
+END;
+GO;
+
+CREATE PROCEDURE SP_Usu√°rios_Carregar_PorEmail_Senha
+	@Email NVARCHAR(255),
+	@Senha NVARCHAR(32)
+AS
+BEGIN
+	SELECT
+		*
+	FROM Usu√°rios
+	WHERE
+		Email = @Email AND
+		Senha = @Senha
+END;
+GO
+
+CREATE PROCEDURE SP_Usu√°rios_Carregar_PorId
+	@Id INT
+AS
+BEGIN
+	SELECT
+		*
+	FROM Usu√°rios
+	WHERE
+		Id = @Id
+END;
+GO
+
 -- Triggers
-CREATE TRIGGER TR_Usu·rios_Insert
-ON Usu·rios
+CREATE TRIGGER TR_Usu√°rios_Insert
+ON Usu√°rios
 AFTER INSERT
 AS
 BEGIN
-    INSERT INTO AgendasUsu·rios (Usu·rioId, Nome)
+    INSERT INTO AgendasUsu√°rios (Usu√°rioId, Nome)
     SELECT Id, 'Pessoal'
     FROM inserted;
-    INSERT INTO AgendasUsu·rios (Usu·rioId, Nome)
+    INSERT INTO AgendasUsu√°rios (Usu√°rioId, Nome)
     SELECT Id, 'Profissional'
     FROM inserted;
 END;
