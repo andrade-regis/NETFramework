@@ -63,7 +63,7 @@ BEGIN
 	
 	SET @Id = SCOPE_IDENTITY();
 END;
-GO;
+GO
 
 CREATE PROCEDURE SP_Usuários_Atualizar
 	@Id INT,
@@ -90,13 +90,14 @@ CREATE PROCEDURE SP_Usuários_Remover
 	@Email NVARCHAR(255)
 AS
 BEGIN
-	DELETE FROM Usuários
+	DELETE FROM 
+		Usuários
 	WHERE
 		Id = @Id AND
 		Nome = @Nome AND
 		Email = @Email
 END;
-GO;
+GO
 
 CREATE PROCEDURE SP_Usuários_Carregar_PorEmail_Senha
 	@Email NVARCHAR(255),
@@ -124,6 +125,208 @@ BEGIN
 END;
 GO
 
+-- AgendasUsuários
+
+CREATE PROCEDURE SP_AgendasUsuários_Adicionar
+	@Id INT OUTPUT,
+	@UsuárioId INT,
+	@Nome NVARCHAR(100)
+AS
+BEGIN
+	INSERT INTO AgendasUsuários
+		(UsuárioId, Nome)
+	VALUES
+		(@UsuárioId, @Nome)
+	
+	SET @Id = SCOPE_IDENTITY();
+END;
+GO
+
+CREATE PROCEDURE SP_AgendasUsuários_Atualizar
+	@Id INT,
+	@UsuárioId INT,
+	@Nome NVARCHAR(100)
+AS
+BEGIN
+	UPDATE AgendasUsuários
+	SET 
+		UsuárioId = @UsuárioId,
+		Nome = @Nome
+	WHERE
+		Id = @Id
+END;
+GO
+
+CREATE PROCEDURE SP_AgendasUsuários_Remover
+	@Id INT,
+	@Nome NVARCHAR(100)
+AS
+BEGIN
+	DELETE FROM 
+		Usuários
+	WHERE
+		Id = @Id AND
+		Nome = @Nome
+END;
+GO
+
+CREATE PROCEDURE SP_AgendasUsuários_Carregar_PorUsuário
+	@UsuárioId INT
+AS
+BEGIN
+	SELECT 
+		* 
+	FROM AgendasUsuários
+	WHERE
+		UsuárioId = @UsuárioId
+END;
+GO
+
+-- ContatosAgendas
+
+CREATE PROCEDURE SP_ContatosAgendas_Adicionar
+	@Id INT OUTPUT,
+	@AgendaUsuárioId INT,
+	@Nome NVARCHAR(100),
+	@Sobrenome NVARCHAR(255),
+	@Email NVARCHAR(255),
+	@Endereço NVARCHAR(255)
+AS
+BEGIN
+	INSERT INTO ContatosAgendas
+		(AgendaUsuárioId, Nome, Sobrenome, Email, Endereço)
+	VALUES
+		(@AgendaUsuárioId, @Nome, @Sobrenome, @Email, @Endereço)
+	
+	SET @Id = SCOPE_IDENTITY();
+END;
+GO
+
+CREATE PROCEDURE SP_ContatosAgendas_Atualizar
+	@Id INT,
+	@AgendaUsuárioId INT,
+	@Nome NVARCHAR(100),
+	@Sobrenome NVARCHAR(255),
+	@Email NVARCHAR(255),
+	@Endereço NVARCHAR(255)
+AS
+BEGIN
+	UPDATE ContatosAgendas
+	SET 
+		AgendaUsuárioId = @AgendaUsuárioId,
+		Nome = @Nome,
+		Sobrenome = @Sobrenome,
+		Email = @Email,
+		Endereço = @Endereço
+	WHERE
+		Id = @Id
+END;
+GO
+
+CREATE PROCEDURE SP_ContatosAgendas_Remover
+	@Id INT,
+	@Nome NVARCHAR(100)
+AS
+BEGIN
+	DELETE FROM ContatosAgendas
+	WHERE
+		Id = @Id AND
+		Nome = @Nome
+END;
+GO
+
+CREATE PROCEDURE SP_ContatosAgendas_Carregar_PorAgendaUsuário
+	@AgendaUsuárioId NVARCHAR(255)
+AS
+BEGIN
+	SELECT
+		*
+	FROM ContatosAgendas
+	WHERE
+		AgendaUsuárioId = @AgendaUsuárioId
+END;
+GO
+
+CREATE PROCEDURE SP_ContatosAgendas_Carregar_PorId
+	@Id INT
+AS
+BEGIN
+	SELECT
+		*
+	FROM ContatosAgendas
+	WHERE
+		Id = @Id
+END;
+GO
+
+-- TelefonesContatos
+
+CREATE PROCEDURE SP_TelefonesContatos_Adicionar
+	@Id INT OUTPUT,
+	@ContatoAgendaId INT,
+	@Número NVARCHAR(20)
+AS
+BEGIN
+	INSERT INTO TelefonesContatos
+		(ContatoAgendaId, Número)
+	VALUES
+		(@ContatoAgendaId, @Número)
+	
+	SET
+		@Id	= SCOPE_IDENTITY()
+END;
+GO
+
+CREATE PROCEDURE SP_TelefonesContatos_Atualizar
+	@Id INT,
+	@ContatoAgendaId INT,
+	@Número NVARCHAR(20)
+AS
+BEGIN
+	UPDATE TelefonesContatos
+	SET
+		ContatoAgendaId = @ContatoAgendaId,
+		Número = @Número
+	WHERE
+		Id = @Id
+END;
+GO
+
+CREATE PROCEDURE SP_TelefonesContatos_Remover
+	@Id INT,
+	@Número NVARCHAR(20)
+AS
+BEGIN
+	DELETE FROM TelefonesContatos
+	WHERE Id = @Id AND
+		  Número = @Número
+END;
+GO
+
+CREATE PROCEDURE SP_TelefonesContatos_Carregar_PorContatoAgenda
+	@ContatoAgendaId INT
+AS
+BEGIN
+	SELECT 
+		* 
+	FROM TelefonesContatos
+	WHERE
+		ContatoAgendaId = @ContatoAgendaId
+END;
+GO
+
+CREATE PROCEDURE SP_TelefonesContatos_Carregar_PorId
+	@Id INT
+AS
+BEGIN
+	SELECT
+		*
+	FROM TelefonesContatos
+	WHERE
+		Id = @Id
+END;
+GO
+
 -- Triggers
 CREATE TRIGGER TR_Usuários_Insert
 ON Usuários
@@ -137,3 +340,4 @@ BEGIN
     SELECT Id, 'Profissional'
     FROM inserted;
 END;
+GO

@@ -5,8 +5,6 @@ VisualStudioVersion = 17.14.36401.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GerenciadorDeContatos.UI", "GerenciadorDeContatos.UI\GerenciadorDeContatos.UI.csproj", "{ACEE9423-CD3E-4DD6-AFEB-F9707A45C698}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GerenciadorDeContatos.Data", "GerenciadorDeContatos.Data\GerenciadorDeContatos.Data.csproj", "{BD87710C-884C-4AE0-A42F-15DA6BA014E8}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
@@ -14,6 +12,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens
 		entrypoint.sh = entrypoint.sh
 		init.sql = init.sql
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GerenciadorDeContatos.Application", "GerenciadorDeContatos.Application\GerenciadorDeContatos.Application.csproj", "{B244D1EF-4934-426E-9207-02A3D10FC979}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GerenciadorDeContatos.Domain", "GerenciadorDeContatos.Domain\GerenciadorDeContatos.Domain.csproj", "{2748B538-292E-4A06-B0E9-E523BEE1089C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GerenciadorDeContatos.Infrastructure", "GerenciadorDeContatos.Infrastructure\GerenciadorDeContatos.Infrastructure.csproj", "{AE53CAD1-966D-43A1-A490-B02821105EE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +29,18 @@ Global
 		{ACEE9423-CD3E-4DD6-AFEB-F9707A45C698}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACEE9423-CD3E-4DD6-AFEB-F9707A45C698}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACEE9423-CD3E-4DD6-AFEB-F9707A45C698}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD87710C-884C-4AE0-A42F-15DA6BA014E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD87710C-884C-4AE0-A42F-15DA6BA014E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BD87710C-884C-4AE0-A42F-15DA6BA014E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD87710C-884C-4AE0-A42F-15DA6BA014E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B244D1EF-4934-426E-9207-02A3D10FC979}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B244D1EF-4934-426E-9207-02A3D10FC979}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B244D1EF-4934-426E-9207-02A3D10FC979}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B244D1EF-4934-426E-9207-02A3D10FC979}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2748B538-292E-4A06-B0E9-E523BEE1089C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2748B538-292E-4A06-B0E9-E523BEE1089C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2748B538-292E-4A06-B0E9-E523BEE1089C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2748B538-292E-4A06-B0E9-E523BEE1089C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE53CAD1-966D-43A1-A490-B02821105EE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE53CAD1-966D-43A1-A490-B02821105EE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE53CAD1-966D-43A1-A490-B02821105EE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE53CAD1-966D-43A1-A490-B02821105EE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
